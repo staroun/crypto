@@ -6,7 +6,7 @@ function toolInit(container) {
         + '<div class="input-group flex-grow"><label for="hill-text">Text</label><textarea id="hill-text" rows="3" placeholder="Enter plaintext or ciphertext...">HELLO</textarea></div>'
         + '</div>'
         + '<div class="input-row">'
-        + '<div class="input-group"><label for="hill-size">Matrix Size</label><select id="hill-size"><option value="2" selected>2 &times; 2</option><option value="3">3 &times; 3</option></select></div>'
+        + '<div class="input-group"><label for="hill-size">Matrix Size</label><select id="hill-size"><option value="2" selected>2 &times; 2</option><option value="3">3 &times; 3</option><option value="4">4 &times; 4</option></select></div>'
         + '<button class="btn btn-accent" id="hill-example">Load Example</button>'
         + '</div>'
         + '<div class="input-row"><div class="input-group flex-grow"><label>Key Matrix K</label><div class="matrix-grid" id="hill-grid"></div></div></div>'
@@ -41,7 +41,8 @@ function toolInit(container) {
     document.getElementById('hill-example').addEventListener('click', function () {
         var examples = {
             2: [[6, 24], [1, 16]],
-            3: [[6, 24, 1], [13, 16, 10], [20, 17, 15]]
+            3: [[6, 24, 1], [13, 16, 10], [20, 17, 15]],
+            4: [[5, 8, 1, 2], [4, 3, 7, 6], [2, 1, 9, 3], [1, 4, 2, 5]]
         };
         var ex = examples[hillSize];
         for (var i = 0; i < hillSize; i++)
@@ -72,41 +73,52 @@ function toolInit(container) {
         return null;
     }
 
-    function det2(m) { return mod26(m[0][0] * m[1][1] - m[0][1] * m[1][0]); }
-
-    function det3(m) {
-        return mod26(
-            m[0][0] * (m[1][1] * m[2][2] - m[1][2] * m[2][1])
-          - m[0][1] * (m[1][0] * m[2][2] - m[1][2] * m[2][0])
-          + m[0][2] * (m[1][0] * m[2][1] - m[1][1] * m[2][0])
-        );
+    // General determinant using cofactor expansion (any size)
+    function det(m) {
+        var n = m.length;
+        if (n === 1) return mod26(m[0][0]);
+        if (n === 2) return mod26(m[0][0] * m[1][1] - m[0][1] * m[1][0]);
+        var result = 0;
+        for (var j = 0; j < n; j++) {
+            var minor = [];
+            for (var r = 1; r < n; r++) {
+                var row = [];
+                for (var c = 0; c < n; c++) {
+                    if (c !== j) row.push(m[r][c]);
+                }
+                minor.push(row);
+            }
+            var sign = (j % 2 === 0) ? 1 : -1;
+            result += sign * m[0][j] * det(minor);
+        }
+        return mod26(result);
     }
 
-    function matInverse2(m) {
-        var d = det2(m);
+    // General matrix inverse mod 26 using adjugate method (any size)
+    function matInverse(m) {
+        var n = m.length;
+        var d = det(m);
         var dInv = modInv26(d);
         if (dInv === null) return null;
-        return [
-            [mod26(dInv * m[1][1]), mod26(dInv * (-m[0][1]))],
-            [mod26(dInv * (-m[1][0])), mod26(dInv * m[0][0])]
-        ];
-    }
 
-    function matInverse3(m) {
-        var d = det3(m);
-        var dInv = modInv26(d);
-        if (dInv === null) return null;
-        // Cofactor matrix transposed (adjugate)
+        // Build cofactor matrix (transposed = adjugate)
         var adj = [];
-        for (var i = 0; i < 3; i++) {
+        for (var i = 0; i < n; i++) {
             adj[i] = [];
-            for (var j = 0; j < 3; j++) {
-                // Minor(j, i) — transposed
-                var rows = [0,1,2].filter(function(r){return r!==j;});
-                var cols = [0,1,2].filter(function(c){return c!==i;});
-                var minor = m[rows[0]][cols[0]] * m[rows[1]][cols[1]] - m[rows[0]][cols[1]] * m[rows[1]][cols[0]];
+            for (var j = 0; j < n; j++) {
+                // Minor(j, i) for adjugate (transposed cofactor)
+                var minor = [];
+                for (var r = 0; r < n; r++) {
+                    if (r === j) continue;
+                    var row = [];
+                    for (var c = 0; c < n; c++) {
+                        if (c === i) continue;
+                        row.push(m[r][c]);
+                    }
+                    minor.push(row);
+                }
                 var sign = ((i + j) % 2 === 0) ? 1 : -1;
-                adj[i][j] = mod26(dInv * sign * minor);
+                adj[i][j] = mod26(dInv * sign * det(minor));
             }
         }
         return adj;
@@ -155,14 +167,13 @@ function toolInit(container) {
         if (!key) { showError(out, 'Please enter valid integers in all key matrix cells.'); return; }
 
         var nums = textToNums(text);
-        // Pad with X (23) if needed
         while (nums.length % n !== 0) nums.push(23);
 
-        var d = (n === 2) ? det2(key) : det3(key);
+        var d = det(key);
         var html = '<strong>Key Matrix K:</strong>' + renderMat(key);
         html += '<div style="margin:0.3rem 0;color:var(--text-dim);font-size:0.85rem;">det(K) mod 26 = ' + d + '</div>';
 
-        html += '<strong>Plaintext Numbers:</strong> ' + nums.map(function(v, i) {
+        html += '<strong>Plaintext Numbers:</strong> ' + nums.map(function(v) {
             return String.fromCharCode(v + 65) + '=' + v;
         }).join(', ');
 
@@ -174,7 +185,6 @@ function toolInit(container) {
             var encrypted = matMulVec(key, block, n);
             resultNums = resultNums.concat(encrypted);
 
-            // Show multiplication detail
             var detail = '';
             for (var r = 0; r < n; r++) {
                 var parts = [];
@@ -202,14 +212,14 @@ function toolInit(container) {
         if (!text.trim()) { showError(out, 'Please enter some text.'); return; }
         if (!key) { showError(out, 'Please enter valid integers in all key matrix cells.'); return; }
 
-        var d = (n === 2) ? det2(key) : det3(key);
+        var d = det(key);
         var dInv = modInv26(d);
         if (dInv === null) {
             showError(out, 'det(K) mod 26 = ' + d + '. gcd(' + d + ', 26) \u2260 1. Key matrix is not invertible mod 26.');
             return;
         }
 
-        var keyInv = (n === 2) ? matInverse2(key) : matInverse3(key);
+        var keyInv = matInverse(key);
         if (!keyInv) { showError(out, 'Failed to compute key inverse.'); return; }
 
         var nums = textToNums(text);
