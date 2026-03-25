@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cryptography Lab</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1><a href="index.html">&#128274; Cryptography Lab</a></h1>
+    </header>
+    <nav class="breadcrumb" id="breadcrumb"></nav>
+
+    <main>
+        <div id="tool-content"></div>
+        <div id="tool-nav"></div>
+    </main>
+
+    <footer>
+        <p>Cryptography Lab &mdash; Interactive Practice Tools for Learning Cryptography</p>
+    </footer>
+
+    <script src="js/tools-config.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/template.js"></script>
+    <script>
+        var toolId = new URLSearchParams(window.location.search).get('id');
+        if (toolId) loadTool(toolId);
+        else window.location.href = 'index.html';
+    </script>
+</body>
+</html>
