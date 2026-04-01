@@ -21,8 +21,8 @@ const TOOLS_CONFIG = [
             { id: "caesar", name: "Caesar Cipher", icon: "C", description: "Shift cipher with encrypt, decrypt & brute force", js: "tools/caesar.js" },
             { id: "multiplicative", name: "Multiplicative Cipher", icon: "\u00D7", description: "E(x) = a\u00D7x mod 26 with brute force", js: "tools/multiplicative.js" },
             { id: "affine", name: "Affine Cipher", icon: "Ax", description: "E(x) = a\u00D7x + b mod 26 with brute force", js: "tools/affine.js" },
-            { id: "vigenere", name: "Vigen\u00E8re Cipher", icon: "V", description: "Polyalphabetic substitution with keyword", js: "tools/vigenere.js" },
             { id: "substitution", name: "Monoalphabetic Substitution Cipher", icon: "S", description: "Custom alphabet mapping cipher", js: "tools/substitution.js" },
+            { id: "vigenere", name: "Vigen\u00E8re Cipher", icon: "V", description: "Polyalphabetic substitution with keyword", js: "tools/vigenere.js" },
             { id: "playfair", name: "Playfair Cipher", icon: "PF", description: "Digraph substitution with 5\u00D75 key matrix", js: "tools/playfair.js" },
             { id: "hill", name: "Hill Cipher", icon: "H", description: "Matrix-based polygraphic cipher \u2014 K\u00D7P mod 26", js: "tools/hill.js" }
         ]
