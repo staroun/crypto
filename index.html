@@ -8,18 +8,23 @@
 </head>
 <body>
     <header>
-        <h1>&#128274; Cryptography Lab</h1>
-        <p class="subtitle">Interactive Cryptography Practice Tools</p>
+        <h1><a href="index.html">&#128274; Cryptography Lab</a></h1>
     </header>
 
-    <main id="app"></main>
+    <nav class="tabbar" id="tabbar"></nav>
+    <nav class="sidebar" id="sidebar"></nav>
+
+    <main>
+        <div id="tool-content"></div>
+    </main>
 
     <footer>
         <p>Cryptography Lab &mdash; Interactive Practice Tools for Learning Cryptography</p>
     </footer>
 
     <script src="js/tools-config.js"></script>
+    <script src="js/main.js"></script>
     <script src="js/template.js"></script>
-    <script>generateIndex('app');</script>
+    <script>initApp();</script>
 </body>
 </html>
