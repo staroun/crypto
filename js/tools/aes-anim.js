@@ -1,7 +1,7 @@
 function toolInit(container) {
     container.innerHTML = '<div class="tool-card">'
         + '<h2>AES Animation</h2>'
-        + '<p class="description">Interactive AES visualization powered by <a href="https://ruffle.rs" target="_blank" rel="noopener" style="color:var(--accent);">Ruffle</a> &mdash; an open-source Flash Player emulator (WebAssembly). Place your <code>aes.swf</code> file at <code>homepage/swf/aes.swf</code>.</p>'
+        + '<p class="description">Interactive AES visualization powered by <a href="https://ruffle.rs" target="_blank" rel="noopener" style="color:var(--accent);">Ruffle</a> &mdash; an open-source Flash Player emulator (WebAssembly). SWF source: <code>homepage/swf/AES.swf</code>.</p>'
         + '<div class="input-row">'
         + '<div class="btn-row">'
         + '<button class="btn btn-secondary" id="aes-anim-reload">Reload</button>'
@@ -14,7 +14,7 @@ function toolInit(container) {
         + '<div id="aes-anim-status" style="margin-top:0.6rem;color:var(--text-dim);font-size:0.82rem;"></div>'
         + '</div>';
 
-    var SWF_PATH = 'swf/aes.swf';
+    var SWF_PATH = 'swf/AES.swf';
     var RUFFLE_CDN = 'https://unpkg.com/@ruffle-rs/ruffle';
     var rufflePlayer = null;
 
