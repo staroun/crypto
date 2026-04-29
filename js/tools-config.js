@@ -32,7 +32,8 @@ const TOOLS_CONFIG = [
         tools: [
             { id: "des", name: "DES Encryption", icon: "DES", description: "64-bit block cipher — step-by-step Feistel rounds & key schedule", js: "tools/des.js" },
             { id: "tdes", name: "3DES (Triple DES)", icon: "3DES", description: "Triple DES in EDE mode — 2-key or 3-key", js: "tools/tdes.js" },
-            { id: "aes", name: "AES Encryption", icon: "AES", description: "AES-CBC with 128 / 192 / 256-bit keys", js: "tools/aes.js" }
+            { id: "aes", name: "AES Encryption", icon: "AES", description: "AES-CBC with 128 / 192 / 256-bit keys", js: "tools/aes.js" },
+            { id: "aes-anim", name: "AES Animation", icon: "▶", description: "Interactive AES visualization (SWF via Ruffle emulator)", js: "tools/aes-anim.js" }
         ]
     },
     {

@@ -1,0 +1,92 @@
+function toolInit(container) {
+    container.innerHTML = '<div class="tool-card">'
+        + '<h2>AES Animation</h2>'
+        + '<p class="description">Interactive AES visualization powered by <a href="https://ruffle.rs" target="_blank" rel="noopener" style="color:var(--accent);">Ruffle</a> &mdash; an open-source Flash Player emulator (WebAssembly). Place your <code>aes.swf</code> file at <code>homepage/swf/aes.swf</code>.</p>'
+        + '<div class="input-row">'
+        + '<div class="btn-row">'
+        + '<button class="btn btn-secondary" id="aes-anim-reload">Reload</button>'
+        + '<button class="btn btn-accent" id="aes-anim-fullscreen">Fullscreen</button>'
+        + '</div>'
+        + '</div>'
+        + '<div id="aes-anim-container" style="background:#000;border:1px solid var(--border);border-radius:6px;min-height:500px;display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-family:var(--font-mono);font-size:0.85rem;overflow:hidden;">'
+        + 'Loading Ruffle...'
+        + '</div>'
+        + '<div id="aes-anim-status" style="margin-top:0.6rem;color:var(--text-dim);font-size:0.82rem;"></div>'
+        + '</div>';
+
+    var SWF_PATH = 'swf/aes.swf';
+    var RUFFLE_CDN = 'https://unpkg.com/@ruffle-rs/ruffle';
+    var rufflePlayer = null;
+
+    function setStatus(msg, isError) {
+        var el = document.getElementById('aes-anim-status');
+        el.textContent = msg;
+        el.style.color = isError ? 'var(--red)' : 'var(--text-dim)';
+    }
+
+    function embedSwf() {
+        var c = document.getElementById('aes-anim-container');
+        c.innerHTML = '';
+        try {
+            var ruffle = window.RufflePlayer.newest();
+            rufflePlayer = ruffle.createPlayer();
+            rufflePlayer.style.width = '100%';
+            rufflePlayer.style.height = '500px';
+            c.appendChild(rufflePlayer);
+            rufflePlayer.load({ url: SWF_PATH }).then(function () {
+                setStatus('Loaded ' + SWF_PATH);
+            }).catch(function (err) {
+                c.innerHTML = '<div style="padding:1rem;text-align:center;">'
+                    + '<strong style="color:var(--red);">Failed to load SWF</strong><br>'
+                    + 'Place your AES.swf file at <code>homepage/swf/aes.swf</code><br>'
+                    + '<span style="font-size:0.78rem;">Error: ' + (err && err.message ? err.message : err) + '</span></div>';
+                setStatus('Load failed', true);
+            });
+        } catch (e) {
+            setStatus('Ruffle init failed: ' + e.message, true);
+        }
+    }
+
+    function loadRuffle() {
+        if (window.RufflePlayer) {
+            embedSwf();
+            return;
+        }
+        var script = document.createElement('script');
+        script.src = RUFFLE_CDN;
+        script.onload = function () {
+            // Ruffle initializes asynchronously; give it a beat
+            var tries = 0;
+            var iv = setInterval(function () {
+                if (window.RufflePlayer && window.RufflePlayer.newest) {
+                    clearInterval(iv);
+                    embedSwf();
+                } else if (++tries > 50) {
+                    clearInterval(iv);
+                    setStatus('Ruffle loaded but RufflePlayer is unavailable. Check network or CDN.', true);
+                }
+            }, 100);
+        };
+        script.onerror = function () {
+            setStatus('Failed to load Ruffle from CDN. Check network connection.', true);
+            var c = document.getElementById('aes-anim-container');
+            c.innerHTML = '<div style="padding:1rem;text-align:center;">'
+                + '<strong style="color:var(--red);">Cannot load Ruffle</strong><br>'
+                + 'Network error or CDN blocked.<br>'
+                + '<span style="font-size:0.78rem;">CDN: ' + RUFFLE_CDN + '</span></div>';
+        };
+        document.head.appendChild(script);
+    }
+
+    document.getElementById('aes-anim-reload').addEventListener('click', function () {
+        loadRuffle();
+    });
+
+    document.getElementById('aes-anim-fullscreen').addEventListener('click', function () {
+        var c = document.getElementById('aes-anim-container');
+        if (c.requestFullscreen) c.requestFullscreen();
+        else if (c.webkitRequestFullscreen) c.webkitRequestFullscreen();
+    });
+
+    loadRuffle();
+}
