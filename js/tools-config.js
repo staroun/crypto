@@ -33,7 +33,10 @@ const TOOLS_CONFIG = [
             { id: "des", name: "DES Encryption", icon: "DES", description: "64-bit block cipher — step-by-step Feistel rounds & key schedule", js: "tools/des.js" },
             { id: "tdes", name: "3DES (Triple DES)", icon: "3DES", description: "Triple DES in EDE mode — 2-key or 3-key", js: "tools/tdes.js" },
             { id: "aes", name: "AES Encryption", icon: "AES", description: "AES-CBC with 128 / 192 / 256-bit keys", js: "tools/aes.js" },
-            { id: "aes-anim", name: "AES Animation", icon: "▶", description: "Interactive AES visualization (SWF via Ruffle emulator)", js: "tools/aes-anim.js" }
+            { id: "aes-anim", name: "AES Animation", icon: "▶", description: "Interactive AES visualization (SWF via Ruffle emulator)", js: "tools/aes-anim.js" },
+            { id: "rc4", name: "RC4 Stream Cipher", icon: "RC4", description: "Variable-key stream cipher — KSA + PRGA (broken; for education)", js: "tools/rc4.js" },
+            { id: "a51", name: "A5/1 Stream Cipher", icon: "A5/1", description: "GSM stream cipher — 3 LFSRs with majority clocking", js: "tools/a51.js" },
+            { id: "chacha20", name: "ChaCha20 Stream Cipher", icon: "ChaCha", description: "Modern 256-bit stream cipher (RFC 8439) — TLS 1.3 / WireGuard", js: "tools/chacha20.js" }
         ]
     },
     {
