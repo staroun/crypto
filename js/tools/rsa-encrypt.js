@@ -4,7 +4,7 @@ function toolInit(container) {
         + '<p class="description">Generate RSA key pairs and perform encryption/decryption using RSA-OAEP with SHA-256 via the Web Crypto API. Keys are exported in JWK (JSON Web Key) format.</p>'
         + '<div class="input-row">'
         + '<div class="input-group"><label for="rsa-enc-keysize">Key Size</label>'
-        + '<select id="rsa-enc-keysize"><option value="2048">2048-bit</option><option value="4096">4096-bit</option></select></div>'
+        + '<select id="rsa-enc-keysize"><option value="1024">1024-bit</option><option value="2048" selected>2048-bit</option></select></div>'
         + '<div class="btn-row"><button class="btn btn-accent" id="rsa-enc-genkey">Generate Key Pair</button></div>'
         + '</div>'
         + '<div class="input-row">'

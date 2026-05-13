@@ -4,7 +4,7 @@ function toolInit(container) {
         + '<p class="description">Sign messages and verify signatures using RSASSA-PKCS1-v1_5 with SHA-256 via the Web Crypto API. The signer uses the private key; the verifier uses the public key.</p>'
         + '<div class="input-row">'
         + '<div class="input-group"><label for="rsa-sig-keysize">Key Size</label>'
-        + '<select id="rsa-sig-keysize"><option value="2048">2048-bit</option><option value="4096">4096-bit</option></select></div>'
+        + '<select id="rsa-sig-keysize"><option value="1024">1024-bit</option><option value="2048" selected>2048-bit</option></select></div>'
         + '<div class="btn-row"><button class="btn btn-accent" id="rsa-sig-genkey">Generate Signing Key Pair</button></div>'
         + '</div>'
         + '<div class="input-row">'

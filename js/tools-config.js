@@ -42,7 +42,9 @@ const TOOLS_CONFIG = [
     {
         category: "Public-Key Cryptography",
         tools: [
-            { id: "rsa-encrypt", name: "RSA Encryption", icon: "RSA", description: "RSA-OAEP encryption & decryption with JWK keys", js: "tools/rsa-encrypt.js" }
+            { id: "rsa-encrypt", name: "RSA Encryption", icon: "RSA", description: "RSA-OAEP encryption & decryption — 1024 / 2048-bit", js: "tools/rsa-encrypt.js" },
+            { id: "elgamal", name: "ElGamal Encryption", icon: "EG", description: "Discrete-log encryption — 1024 / 2048-bit MODP primes", js: "tools/elgamal.js" },
+            { id: "ecc", name: "ECC (Elliptic Curve)", icon: "ECC", description: "ECDH key exchange & ECDSA signature — P-256 / P-384", js: "tools/ecc.js" }
         ]
     },
     {
